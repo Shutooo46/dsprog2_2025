@@ -213,7 +213,18 @@ function displayWeatherForecast(data, areaName) {
         }
         
         // Tomorrow's precipitation probability
-        elements.tomorrowPop.textContent = '-';
+        if (pops.length > 0 && pops[0].pops) {
+            const popValues = pops[0].pops;
+            const tomorrowPops = popValues.slice(4, 8).filter(p => p !== '').map(Number);
+            if (tomorrowPops.length > 0) {
+                const maxPop = Math.max(...tomorrowPops);
+                elements.tomorrowPop.textContent = `${maxPop}%`;
+            } else {
+                elements.tomorrowPop.textContent = '-';
+            }
+        } else {
+            elements.tomorrowPop.textContent = '-';
+        }
     }
     
     // Weekly forecast
@@ -241,13 +252,13 @@ function displayWeeklyForecast(weeklyData) {
         
         const dayName = getDayName(timeDefines[i]);
         const icon = getWeatherIcon(areas.weatherCodes[i]);
-        const pop = areas.pops?.[i] || '-';
+        const pop = areas.pops?.[i];
         
         item.innerHTML = `
             <span class="weekly-day">${dayName}</span>
             <span class="weekly-icon">${icon}</span>
             <span class="weekly-weather"></span>
-            <span class="weekly-pop">${pop ? pop + '%' : '-'}</span>
+            <span class="weekly-pop">${pop !== undefined && pop !== '' ? pop + '%' : '-'}</span>
         `;
         
         elements.weeklyList.appendChild(item);
