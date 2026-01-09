@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天気予報 | 気象庁API + SQLite</title>
+    <meta name="description" content="気象庁APIを利用した日本全国の天気予報アプリケーション（DB連携版）">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <span class="icon">🌤️</span>
+                    天気予報
+                </h1>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Region Selector -->
+            <section class="region-selector" id="region-selector">
+                <div class="selector-row">
+                    <div class="selector-item">
+                        <label for="area-select" class="select-label">地域を選択</label>
+                        <div class="select-wrapper">
+                            <select id="area-select" class="area-select">
+                                <option value="">地域を選択してください</option>
+                            </select>
+                            <span class="select-arrow">▼</span>
+                        </div>
+                    </div>
+                    <div class="selector-item">
+                        <label for="history-select" class="select-label">過去の予報</label>
+                        <div class="select-wrapper">
+                            <select id="history-select" class="area-select">
+                                <option value="">最新の予報</option>
+                            </select>
+                            <span class="select-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading Indicator -->
+            <div class="loading" id="loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>天気情報を取得中...</p>
+            </div>
+
+            <!-- Weather Display -->
+            <section class="weather-display" id="weather-display" style="display: none;">
+                <!-- Area Name -->
+                <div class="area-header" id="area-header">
+                    <h2 class="area-name" id="area-name"></h2>
+                    <p class="update-time" id="update-time"></p>
+                    <p class="data-source" id="data-source"></p>
+                </div>
+
+                <!-- Today's Weather -->
+                <div class="weather-card today-weather" id="today-weather">
+                    <h3 class="card-title">今日の天気</h3>
+                    <div class="weather-main">
+                        <div class="weather-icon" id="today-icon"></div>
+                        <div class="weather-info">
+                            <p class="weather-text" id="today-weather-text"></p>
+                            <div class="temp-container">
+                                <span class="temp-label">気温</span>
+                                <span class="temp-value" id="today-temp"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weather-details">
+                        <div class="detail-item">
+                            <span class="detail-label">降水確率</span>
+                            <span class="detail-value" id="today-pop"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">風</span>
+                            <span class="detail-value" id="today-wind"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tomorrow's Weather -->
+                <div class="weather-card tomorrow-weather" id="tomorrow-weather">
+                    <h3 class="card-title">明日の天気</h3>
+                    <div class="weather-main">
+                        <div class="weather-icon" id="tomorrow-icon"></div>
+                        <div class="weather-info">
+                            <p class="weather-text" id="tomorrow-weather-text"></p>
+                            <div class="temp-container">
+                                <span class="temp-label">気温</span>
+                                <span class="temp-value" id="tomorrow-temp"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weather-details">
+                        <div class="detail-item">
+                            <span class="detail-label">降水確率</span>
+                            <span class="detail-value" id="tomorrow-pop"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">風</span>
+                            <span class="detail-value" id="tomorrow-wind"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weekly Forecast -->
+                <div class="weather-card weekly-forecast" id="weekly-forecast">
+                    <h3 class="card-title">週間天気予報</h3>
+                    <div class="weekly-list" id="weekly-list">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Error Message -->
+            <div class="error-message" id="error-message" style="display: none;">
+                <span class="error-icon">⚠️</span>
+                <p id="error-text">天気情報の取得に失敗しました。</p>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>データ提供: <a href="https://www.jma.go.jp/" target="_blank" rel="noopener">気象庁</a></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
